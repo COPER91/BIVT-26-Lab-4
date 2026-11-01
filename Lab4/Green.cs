@@ -19,13 +19,13 @@ namespace Lab4
 
             if (count > 0)
             {
-                double sred = sum / count;
+                double average = sum / count;
 
                 for (int i = 0; i < array.Length; i++)
                 {
                     if (array[i] > 0)
                     {
-                        array[i] = sred;
+                        array[i] = average;
                     }
                 }
             }
@@ -37,14 +37,23 @@ namespace Lab4
             int sum = 0;
 
             // code here
+            int negativeID = -1;
+
             for (int i = 0; i < array.Length; i++)
             {
                 if (array[i] < 0)
                 {
+                    negativeID = i;
                     break;
                 }
+            }
 
-                sum += array[i] * array[i];
+            if (negativeID != -1)
+            {
+                for (int i = 0; i < negativeID; i++)
+                {
+                    sum += array[i] * array[i];
+                }
             }
             // end
 
@@ -298,7 +307,7 @@ namespace Lab4
             }
 
             cleared = new int[count];
-            int id = 0;
+            int index = 0;
 
             for (int i = 0; i < array.Length; i++)
             {
@@ -315,8 +324,8 @@ namespace Lab4
 
                 if (!found)
                 {
-                    cleared[id] = array[i];
-                    id++;
+                    cleared[index] = array[i];
+                    index++;
                 }
             }
             // end
@@ -329,34 +338,26 @@ namespace Lab4
             double[] A = null, B = null;
 
             // code here
-            if (n <= 0)
+            if (n <= 0 || a == b)
             {
                 return null;
             }
 
             if (n == 1)
             {
-                if (a != b)
-                {
-                    return null;
-                }
-
-                A = new double[1];
-                A[0] = a;
+                return null;
             }
-            else
+
+            A = new double[n];
+
+            double step = (b - a) / (n - 1);
+
+            for (int i = 0; i < n; i++)
             {
-                A = new double[n];
-
-                double step = (b - a) / (n - 1);
-
-                for (int i = 0; i < n; i++)
-                {
-                    A[i] = a + i * step;
-                }
-
-                A[n - 1] = b;
+                A[i] = a + i * step;
             }
+
+            A[n - 1] = b;
 
             double sum = 0;
             int count = 0;
@@ -408,38 +409,41 @@ namespace Lab4
             int wins = 0;
 
             // code here
-            int playerCurse = 0;
-            int cheaterCurse = 0;
+            int[] player = new int[dices.Length];
+            int[] cheater = new int[dices.Length];
+
+            int sixCount = 0;
 
             for (int i = 0; i < dices.Length; i++)
             {
-                int player = dices[i] - playerCurse;
+                player[i] = dices[i] - sixCount;
 
-                if (player < 1)
+                if (player[i] < 1)
                 {
-                    player = 1;
+                    player[i] = 1;
                 }
 
-                int cheater = 6 - cheaterCurse;
-
-                if (cheater < 1)
+                if (dices[i] == 6)
                 {
-                    cheater = 1;
+                    sixCount++;
                 }
+            }
 
-                if (player > cheater)
+            for (int i = 0; i < dices.Length; i++)
+            {
+                cheater[i] = 6 - i;
+
+                if (cheater[i] < 1)
+                {
+                    cheater[i] = 1;
+                }
+            }
+
+            for (int i = 0; i < dices.Length; i++)
+            {
+                if (player[i] > cheater[i])
                 {
                     wins++;
-                }
-
-                if (player == 6)
-                {
-                    playerCurse++;
-                }
-
-                if (cheater == 6)
-                {
-                    cheaterCurse++;
                 }
             }
             // end
